@@ -1,5 +1,7 @@
 require('rootpath')()
 const express = require('express')
+const https = require('https')
+const fs = require('fs')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -58,7 +60,16 @@ app.get('/boom', (req, res, next) => {
 // global error handler
 app.use(middleware.errorHandler)
 
-// start server
-app.listen(process.env.PORT, () => {
+const options = {
+  key: fs.readFileSync(process.env.KEY),
+  cert: fs.readFileSync(process.env.CERT),
+}
+
+https.createServer(options, app).listen(process.env.PORT, () => {
   console.log('Server listening on port ' + process.env.PORT)
 })
+
+// // start server
+// app.listen(process.env.PORT, () => {
+//   console.log('Server listening on port ' + process.env.PORT)
+// })
