@@ -37,18 +37,26 @@ app.use(middleware.loggingMiddleware)
 app.use(middleware.firstMiddleware)
 
 // use middleware logger functions
-app.use(httpLoggerMiddleware)
-app.use(errorLoggerMiddleware)
+if (httpLoggerMiddleware) {
+  app.use(httpLoggerMiddleware)
+}
+if (errorLoggerMiddleware) {
+  app.use(errorLoggerMiddleware)
+}
 
 // Route handler
 app.get('/', (req, res) => {
-  infoLogger.info(`${req.requestId} - This is a route /`)
+  if (infoLogger) {
+    infoLogger.info(`${req.requestId} - This is a route /`)
+  }
   res.send('Hello World!')
 })
 
 // Thêm route để test logging
 app.get('/hello', (req, res) => {
-  infoLogger.info(`${req.requestId} - This is a route /hello`)
+  if (infoLogger) {
+    infoLogger.info(`${req.requestId} - This is a route /hello`)
+  }
   res.send('Hello!')
 })
 
