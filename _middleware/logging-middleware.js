@@ -18,14 +18,18 @@ module.exports = (req, res, next) => {
   res.on('finish', () => {
     const duration = Date.now() - startTime
     if (infoLogger) {
+      // Ghi log thông tin phản hồi
       infoLogger.info(
-        `${req.requestId} - ${res.statusCode} ${res.statusMessage}; ${
-          res.get('Content-Length') || 0
-        }b sent; Headers: ${JSON.stringify(
-          res.getHeaders()
-        )}; Duration: ${duration}ms; Body: ${JSON.stringify(res.body)}`
+        `${req.requestId} - ${res.statusCode} ${res.statusMessage}; ` +
+          `${res.get('Content-Length') || 0}b sent; Headers: ${JSON.stringify(
+            res.getHeaders()
+          )}; ` +
+          `Duration: ${duration}ms; Body: ${
+            typeof res.body === 'string' ? res.body : JSON.stringify(res.body)
+          }`
       )
     }
   })
+
   next()
 }
